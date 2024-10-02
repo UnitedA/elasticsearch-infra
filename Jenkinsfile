@@ -6,7 +6,7 @@ pipeline {
     environment {
         TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/pipeline-infra/"
         INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/elasticsearch/"
-        TERRAFORM_BIN = "/var/lib/jenkins/bin/terraform"  // Explicit path to Terraform binary
+        TERRAFORM_BIN = "/usr/local/bin/terraform"  // Explicit path to Terraform binary
     }
     stages {
         stage('Clone Repository') {
