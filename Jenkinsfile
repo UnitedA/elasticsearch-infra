@@ -6,6 +6,7 @@ pipeline {
     environment {
         TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/pipeline-infra/"
         INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/elasticsearch/"
+        TERRAFORM_BIN = "/var/lib/jenkins/bin/terraform"  // Explicit path to Terraform binary
     }
     stages {
         stage('Clone Repository') {
@@ -16,13 +17,13 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 // Initialize Terraform
-                sh "cd ${env.TERRAFORM_WORKSPACE} && terraform init"
+                sh "cd ${env.TERRAFORM_WORKSPACE} && ${env.TERRAFORM_BIN} init"
             }
         }
         stage('Terraform Plan') {
             steps {
                 // Run Terraform plan
-                sh "cd ${env.TERRAFORM_WORKSPACE} && terraform plan"
+                sh "cd ${env.TERRAFORM_WORKSPACE} && ${env.TERRAFORM_BIN} plan"
             }
         }
         stage('Approval For Apply') {
@@ -42,7 +43,7 @@ pipeline {
                 // Run Terraform apply
                 sh """
                 cd ${env.TERRAFORM_WORKSPACE}
-                terraform apply -auto-approve
+                ${env.TERRAFORM_BIN} apply -auto-approve
                 mkdir -p ${env.INSTALL_WORKSPACE} 
                 sudo cp ${env.TERRAFORM_WORKSPACE}/all_key.pem ${env.INSTALL_WORKSPACE}/
                 sudo chown jenkins:jenkins ${env.INSTALL_WORKSPACE}/all_key.pem
@@ -65,31 +66,15 @@ pipeline {
             }
             steps {
                 // Destroy Infra
-                sh "cd ${env.TERRAFORM_WORKSPACE} && terraform destroy -auto-approve"
+                sh "cd ${env.TERRAFORM_WORKSPACE} && ${env.TERRAFORM_BIN} destroy -auto-approve"
             }
         }
-        // stage('Tool Deploy') {
-        //     when {
-        //         expression { params.ACTION == 'apply' }
-        //     }
-        //     steps {
-        //         sshagent(['tom-1-key.pem']) {
-        //             script {
-        //                 sh '''
-        //                     ansible-playbook -i aws_ec2.yaml playbook.yml
-        //                 '''
-        //             }
-            //     }
-            // }
-        // }
     }
     post {
         success {
-            // Actions to take if the pipeline is successful
             echo 'Succeeded!'
         }
         failure {
-            // Actions to take if the pipeline fails
             echo 'Failed!'
         }
     }
