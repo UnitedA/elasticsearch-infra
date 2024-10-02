@@ -4,7 +4,7 @@ pipeline {
         choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Select action: apply or destroy')
     }
     environment {
-        TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/elasticsearch-infra/"
+        TERRAFORM_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/pipeline-infra/"
         INSTALL_WORKSPACE = "/var/lib/jenkins/workspace/tool_deploy/elasticsearch/"
     }
     stages {
