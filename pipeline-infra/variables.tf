@@ -104,7 +104,7 @@ variable "egress_ports" {
 
 # Autoscaling Configuration (Optional for clustering)
 variable "desired_capacity" {
-  default = "1"  # Single node Elasticsearch setup
+  default = "2"  # Two node Elasticsearch setup
 }
 
 variable "max_size" {
