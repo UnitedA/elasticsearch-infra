@@ -71,6 +71,12 @@ variable "ingress_ports" {
       cidr_blocks = ["0.0.0.0/0"]  # For Elasticsearch cluster node communication
     },
     {
+      from_port   = 5601
+      to_port     = 5601
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]  # kibana
+    },
+    {
       from_port   = 22
       to_port     = 22
       protocol    = "tcp"
